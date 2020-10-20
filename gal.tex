@@ -1,0 +1,409 @@
+\documentclass[14pt]{extarticle}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{amsmath,amsfonts}
+\usepackage{hyperref}
+
+\title{GEometric Algebra}
+
+\author{LAK132}
+
+\begin{document}
+
+\color{white}
+\pagecolor{black!90}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+\maketitle
+
+\pagebreak
+\tableofcontents
+
+%
+% Dot product
+%
+
+\pagebreak
+\section{Dot product}
+\label{sec:dot-product}
+
+The dot product (\(\cdot\)) of 2 vectors (\(a\) and \(b\))
+creates a scalar:
+
+\newcommand{\dotpart}[4]{ #1_#2 #3_#4 }
+
+\newcommand{\expdot}[3][]{
+  #1 \dotpart{#2}{1}{#3}{1} + \cdots + #1 \dotpart{#2}{n}{#3}{n}}
+
+\( a \cdot b = \expdot{a}{b} \)
+
+Note:
+
+\( a \cdot b = b \cdot a \)
+
+%
+% Outer product
+%
+
+\pagebreak
+\section{Outer product}
+\label{sec:outer-product}
+
+The outer product (\(\wedge\)) of 2 vectors (\(a\) and \(b\))
+creates a bivector (\(\mathbf{A}\)):
+
+\newcommand{\wedgepart}[4]{(#1_#2 #3_#4 - #1_#4 #3_#2) (e_#2 \wedge e_#4)}
+
+\newcommand{\expwedge}[2]{
+  \wedgepart{#1}{1}{#2}{2} + \cdots + \wedgepart{#1}{n}{#2}{1}}
+
+\newcommand{\expwedgepre}[3]{
+  #1 \wedgepart{#2}{1}{#3}{2} + \cdots + #1 \wedgepart{#2}{n}{#3}{1}}
+
+\newcommand{\expwedgepost}[3]{
+  \wedgepart{#1}{1}{#2}{2} #3 + \cdots + \wedgepart{#1}{n}{#2}{1} #3}
+
+\newcommand{\expwedgeprepost}[4]{
+  #1 \wedgepart{#2}{1}{#3}{2} #4 + \cdots + #1 \wedgepart{#2}{n}{#3}{1} #4}
+
+\(
+  \mathbf{A}
+  = a \wedge b \\
+  = \expwedge{a}{b}
+  % = (a_1 b_2 - a_2 b_1) (e_1 \wedge e_2)
+  % + (a_2 b_3 - a_3 b_2) (e_2 \wedge e_3)
+  % + \cdots
+  % + (a_n b_1 - a_1 b_n) (e_n \wedge e_1)
+\)
+
+Where \(n\) is the dimension of \(a\) and \(b\),
+and \(e_{1..n}\) are the basis vectors.
+
+If we let
+\( A_{e_i e_j} = (a_{e_i} b_{e_j} - a_{e_j} b_{e_i})(e_i \wedge e_j) \),
+then this simplifies to:
+
+\(
+  \mathbf{A}
+  = a \wedge b \\
+  = (a_1 e_1 + \cdots + a_n e_n) \wedge (b_1 e_1 + \cdots + b_n e_n) \\
+  = a_1 b \\
+  = A_{e_1 e_2} + A_{e_2 e_3} + \cdots + A_{e_n e_1}
+\)
+
+Chaining:
+
+\(
+  a_1 \wedge a_2 \wedge \cdots \wedge a_r
+  = \frac{1}{r!} \sum\limits_{\sigma \in \mathfrak{G}_r}
+  \textrm{sgn} (\sigma) a_{\sigma (1)} a_{\sigma (2)} \cdots a_{\sigma (r)} ,
+\)
+
+Note:
+
+\( a \wedge b = - (b \wedge a) \)
+
+In 2D:
+
+\(
+  a \wedge b
+  = \mathbf{A}
+  = A_{xy}
+  = (a_x b_y - a_y b _x) (x \wedge y)
+\)
+
+In 3D:
+
+\(
+  a \wedge b
+  = \mathbf{A}
+  = A_{xy} + A_{yz} + A_{zx} \\
+  = (a_x b_y - a_y b_x) (x \wedge y)
+  + (a_y b_z - a_z b_y) (y \wedge z)
+  + (a_z b_x - a_x b_z) (z \wedge x)
+\)
+
+\pagebreak
+In 3D we also find that the outer product looks very similar to
+the cross product:
+
+\(
+  a \wedge b = \\
+  (a_x b_y - a_y b_x) (x \wedge y) + \\
+  (a_z b_x - a_x b_z) (z \wedge x) + \\
+  (a_y b_z - a_z b_y) (y \wedge z)
+\)
+
+\(
+  a \times b = \\
+  (a_x b_y - a_y b_x) z + \\
+  (a_z b_x - a_x b_z) y + \\
+  (a_y b_z - a_z b_y) x
+\)
+
+%
+% Geometric product
+%
+
+\pagebreak
+\section{Geometric product}
+\label{sec:geometric-product}
+
+The geometric product of 2 vectors (\(a\) and \(b\))
+creates a rotor (\(\mathbf{R}\)):
+
+\(
+  ab
+  = \mathbf{R}
+  = \frac{1}{2} (ab + ba) + \frac{1}{2} (ab - ba)
+  = (a \cdot b) + (a \wedge b)
+\)
+
+For perpendicular vectors (\(c\) and \(d\)) we find that \( c \cdot d = 0 \),
+hence:
+
+\( cd = (c \cdot d) + (c \wedge d) = 0 + (c \wedge d) = c \wedge d \)
+
+Because basis vectors are perpendicular,
+we can use this to simplify the outer product equation:
+
+\(
+  a \wedge b \\
+  = (a_1 b_2 - a_2 b_1) e_1 e_2
+  + (a_2 b_3 - a_3 b_2) e_2 e_3
+  + \cdots
+  + (a_n b_1 - a_1 b_n) e_n e_1 \\
+  = (a_1 b_2 - a_2 b_1) e_{12}
+  + (a_2 b_3 - a_3 b_2) e_{23}
+  + \cdots
+  + (a_n b_1 - a_1 b_n) e_{n1}
+\)
+
+In 2D:
+
+\(
+  ab
+  = (a_x b_x + a_y b_y)
+  + (a_x b_y - a_y b_x) xy
+\)
+
+In 3D:
+
+\(
+  ab \\
+  = (a_x b_x + a_y b_y + a_z b_z)
+  + (a_x b_y - a_y b_x) xy
+  + (a_y b_z - a_z b_y) yz
+  + (a_z b_x - a_x b_z) zx
+\)
+
+%
+% Reflection
+%
+
+\pagebreak
+\section{Reflection}
+\label{sec:reflection}
+
+Given a vector \(v\) and unit vector \(a\), \(v_\parallel\) is \(v\)
+projected onto \(a\):
+
+\( v_\parallel = a (a \cdot v) \)
+
+\(v_\perp\) is the the vector perpendicular to \(a\) that sums with
+\(v_\parallel\) to equal \(v\):
+
+\( v_\perp = v - v_\parallel \)
+
+To reflect \(v\) by the plane perpendicular to \(a\),
+we define the function \(R_a(v)\):
+
+\( R_a(v) = -ava \)
+
+\(
+  va \\
+  = (v \cdot a) + (v \wedge a) \\
+  = ((v_\parallel + v_\perp) \cdot a)
+  + ((v_\parallel + v_\perp) \wedge a) \\
+  = (v_\parallel \cdot a) + (v_\perp \cdot a)
+  + (v_\parallel \wedge a) + (v_\perp \wedge a) \\
+  = (v_\parallel \cdot a) + (0) + (0) + (v_\perp \wedge a) \\
+  = (v_\parallel \cdot a) + (v_\perp \wedge a) \\
+  = (v_\parallel \cdot a) + (v_\perp a)
+\)
+
+\(
+  ava \\
+  = a (v a) \\
+  = a ((v_\parallel \cdot a) + (v_\perp a)) \\
+  = (a (v_\parallel \cdot a)) + (a (v_\perp a)) \\
+  = (a (v_\parallel \cdot a)) + (a v_\perp a) \\
+  = v_\parallel + (a v_\perp a) \\
+  = v_\parallel - (v_\perp a a) \\
+  = v_\parallel - v_\perp
+\)
+
+\(
+  -ava \\
+  = -(v_\parallel - v_\perp)\\
+  = v_\perp - v_\parallel \\
+  = v - 2 a (a \cdot v)
+\)
+
+%
+% Rotation
+%
+
+\pagebreak
+\section{Rotataion}
+\label{sec:rotation}
+
+% Basis vectors table:
+%
+% 2D:
+%   2   1
+%
+% 3D:
+%   2   1
+% 123   3
+%
+% 4D:
+%   2   1 123
+% 123   3   2
+% 134 234   4
+%
+% 5D:
+%   2   1 123 124
+% 123   3   2 234
+% 134 234   4   3
+% 145 245 345   5
+%
+% 6D:
+%   2   1 123 124 125
+% 123   3   2 234 235
+% 134 234   4   3 345
+% 145 245 345   5   4
+% 156 256 356 456   6
+%
+% 7D:
+%   2   1 123 124 125 126
+% 123   3   2 234 235 236
+% 134 234   4   3 345 346
+% 145 245 345   5   4 456
+% 156 256 356 456   6   5
+%   6 126 136 146 156   1
+
+\subsection{2D}
+\label{subsec:rotation-2D}
+
+Rotor \( R = R_a + R_{xy} \mathbf{xy} \)
+
+Vector \( v = v_x \mathbf{x} + v_y \mathbf{y} \)
+
+Trivector \( T = R v = R_a v + R_{xy} \mathbf{xy} v \)
+
+\(
+  = R_a (v_x \mathbf{x} + v_y \mathbf{y})
+  + R_{xy} \mathbf{xy} (v_x \mathbf{x} + v_y \mathbf{y})
+\)
+
+\(
+  = R_a v_x \mathbf{x} + R_a v_y \mathbf{y}
+  + R_{xy} v_x \mathbf{xyx} + R_{xy} v_y \mathbf{xyy}
+\)
+
+\(
+  = R_a v_x \mathbf{x} + R_a v_y \mathbf{y}
+  - R_{xy} v_x \mathbf{y} + R_{xy} v_y \mathbf{x}
+\)
+
+\(
+  = (R_a v_x + R_{xy} v_y) \mathbf{x}
+  + (R_a v_y - R_{xy} v_x) \mathbf{y}
+\)
+
+Rotor \( R' = R_a - R_{xy} \mathbf{xy} \)
+
+Vector \( v' = R v R' = T R' \)
+
+\(
+  = ((R_a v_x + R_{xy} v_y) \mathbf{x} + (R_a v_y - R_{xy} v_x) \mathbf{y})
+  (R_a - R_{xy} \mathbf{xy})
+\)
+
+\(
+  = ((R_a v_x + R_{xy} v_y) \mathbf{x}
+     + (R_a v_y - R_{xy} v_x) \mathbf{y}) R_a \\
+  - ((R_a v_x + R_{xy} v_y) \mathbf{x}
+     + (R_a v_y - R_{xy} v_x) \mathbf{y}) R_{xy} \mathbf{xy}
+\)
+
+\(
+  = ((R_a v_x + R_{xy} v_y) \mathbf{x} R_a
+     + (R_a v_y - R_{xy} v_x) \mathbf{y} R_a) \\
+  - ((R_a v_x + R_{xy} v_y) \mathbf{x} R_{xy} \mathbf{xy}
+     + (R_a v_y - R_{xy} v_x) \mathbf{y} R_{xy} \mathbf{xy})
+\)
+
+\(
+  = ((R_a R_a v_x + R_a R_{xy} v_y) \mathbf{x}
+     + (R_a R_a v_y - R_a R_{xy} v_x) \mathbf{y}) \\
+  - ((R_a R_{xy} v_x + R_{xy} R_{xy} v_y) \mathbf{xxy}
+     + (R_a R_{xy} v_y - R_{xy} R_{xy} v_x) \mathbf{yxy})
+\)
+
+\(
+  = ((R_a^2 v_x + R_a R_{xy} v_y) \mathbf{x}
+     + (R_a^2 v_y - R_a R_{xy} v_x) \mathbf{y}) \\
+  - ((R_a R_{xy} v_x + R_{xy}^2 v_y) \mathbf{y}
+     - (R_a R_{xy} v_y - R_{xy}^2 v_x) \mathbf{x})
+\)
+
+\(
+  = ((R_a^2 v_x + R_a R_{xy} v_y) \mathbf{x}
+     + (R_a^2 v_y - R_a R_{xy} v_x) \mathbf{y}) \\
+  + ((R_a R_{xy} v_y - R_{xy}^2 v_x) \mathbf{x}
+     - (R_a R_{xy} v_x + R_{xy}^2 v_y) \mathbf{y})
+\)
+
+\(
+  = ((R_a^2 v_x + R_a R_{xy} v_y)
+     + (R_a R_{xy} v_y - R_{xy}^2 v_x)) \mathbf{x} \\
+  + ((R_a^2 v_y - R_a R_{xy} v_x)
+     - (R_a R_{xy} v_x + R_{xy}^2 v_y)) \mathbf{y}
+\)
+
+\(
+  = (R_a^2 v_x + R_a R_{xy} v_y + R_a R_{xy} v_y - R_{xy}^2 v_x) \mathbf{x} \\
+  + (R_a^2 v_y - R_a R_{xy} v_x - R_a R_{xy} v_x - R_{xy}^2 v_y) \mathbf{y}
+\)
+
+\(
+  = (R_a^2 v_x + 2 R_a R_{xy} v_y - R_{xy}^2 v_x) \mathbf{x}
+  + (R_a^2 v_y - 2 R_a R_{xy} v_x - R_{xy}^2 v_y) \mathbf{y}
+\)
+
+\(
+  = ((R_a^2 - R_{xy}^2) v_x + 2 R_a R_{xy} v_y) \mathbf{x}
+  + ((R_a^2 - R_{xy}^2) v_y - 2 R_a R_{xy} v_x) \mathbf{y}
+\)
+
+\(
+  R = \mathbf{xy}
+  = (\mathbf{x} \cdot \mathbf{y}) + (\mathbf{x} \wedge \mathbf{y})
+  = 0 + 1 \mathbf{xy}
+\)
+
+\(
+  = ((0^2 - 1^2) v_x + 0 v_y) \mathbf{x}
+  + ((0^2 - 1^2) v_y - 0 v_x) \mathbf{y}
+\)
+
+\(
+  = - v_x \mathbf{x} + - v_y \mathbf{y}
+\)
+
+\end{document}
